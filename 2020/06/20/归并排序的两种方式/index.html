@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>归并排序的两种方式 | ☕</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="概述归并排序是目前最高效的排序算法之一，它兼具稳定和低复杂度的特点，其最坏时间复杂度O(nlogn)，空间复杂度O(n)。 归并排序采用计算机科学的分治思想，因此有两种实现方式：自顶向下和自底向上。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="归并排序的两种方式">
+<meta property="og:url" content="https://ubok.net/2020/06/20/%E5%BD%92%E5%B9%B6%E6%8E%92%E5%BA%8F%E7%9A%84%E4%B8%A4%E7%A7%8D%E6%96%B9%E5%BC%8F/index.html">
+<meta property="og:site_name" content="☕">
+<meta property="og:description" content="概述归并排序是目前最高效的排序算法之一，它兼具稳定和低复杂度的特点，其最坏时间复杂度O(nlogn)，空间复杂度O(n)。 归并排序采用计算机科学的分治思想，因此有两种实现方式：自顶向下和自底向上。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://ubok.net/2020/06/20/%E5%BD%92%E5%B9%B6%E6%8E%92%E5%BA%8F%E7%9A%84%E4%B8%A4%E7%A7%8D%E6%96%B9%E5%BC%8F/top-down.png">
+<meta property="og:image" content="https://ubok.net/2020/06/20/%E5%BD%92%E5%B9%B6%E6%8E%92%E5%BA%8F%E7%9A%84%E4%B8%A4%E7%A7%8D%E6%96%B9%E5%BC%8F/bottom-up.png">
+<meta property="article:published_time" content="2020-06-20T08:36:24.000Z">
+<meta property="article:modified_time" content="2020-06-20T09:29:12.490Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://ubok.net/2020/06/20/%E5%BD%92%E5%B9%B6%E6%8E%92%E5%BA%8F%E7%9A%84%E4%B8%A4%E7%A7%8D%E6%96%B9%E5%BC%8F/top-down.png">
+  
+    <link rel="alternate" href="/atom.xml" title="☕" type="application/atom+xml">
+  
+  
+    <link rel="icon" type="image/png" sizes="32x32" href="data:image/png;base64,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">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+
+  <link rel="stylesheet" href="//stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+
+  <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css" integrity="sha384-XdYbMnZ/QjLh6iI4ogqCTaIjrFk87ip+ekIjefZch0Y+PvJ8CDYtEs1ipDmPorQ+" crossorigin="anonymous">
+
+  
+<link rel="stylesheet" href="/css/styles.css">
+
+  
+
+<meta name="generator" content="Hexo 4.2.1"></head>
+
+<body>
+  <div class="container">
+    <header class="blog-header py-3">
+  <div class="row flex-nowrap justify-content-between align-items-center">
+    <div class="col-12 text-center">
+      <a class="blog-header-logo text-dark" href="/">⌘+C 码农</a>
+      <div class="blog-header-banner"></div>
+    </div>
+  </div>
+</header>
+    
+    <div class="nav-scroller py-1 mb-2">
+  <nav class="nav d-flex justify-content-between">
+<!--    <a class="p-2 text-muted" href="#">null</a>-->
+  </nav>
+</div>
+    <div class="row">
+        <div class="col-sm-8 blog-main">
+          <article id="post-归并排序的两种方式" class="article article-type-post" itemscope itemprop="blogPost">
+
+  <header class="article-header">
+    
+  
+    <h1 class="article-title" itemprop="name">
+      归并排序的两种方式
+    </h1>
+  
+
+
+  </header>
+
+  <div class="article-meta">
+    <div class="article-datetime">
+  <a href="/2020/06/20/%E5%BD%92%E5%B9%B6%E6%8E%92%E5%BA%8F%E7%9A%84%E4%B8%A4%E7%A7%8D%E6%96%B9%E5%BC%8F/" class="article-date"><time datetime="2020-06-20T08:36:24.000Z" itemprop="datePublished">2020-06-20</time></a>
+</div>
+
+    
+    
+
+  </div>
+  <div class="article-inner">
+
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>归并排序是目前最高效的排序算法之一，它兼具稳定和低复杂度的特点，其最坏时间复杂度<code>O(nlogn)</code>，空间复杂度<code>O(n)</code>。</p>
+<p>归并排序采用计算机科学的分治思想，因此有两种实现方式：自顶向下和自底向上。</p>
+<a id="more"></a>
+
+<h2 id="自顶向下"><a href="#自顶向下" class="headerlink" title="自顶向下"></a>自顶向下</h2><p>针对分治问题，自顶向下是一张常见且较为简便的方式，它采用递归操作。</p>
+<p>因此归并排序的原理也就清楚了，首先将数组拆分为两个，进行递归调用，然后合并排序结果。</p>
+<img src="/2020/06/20/%E5%BD%92%E5%B9%B6%E6%8E%92%E5%BA%8F%E7%9A%84%E4%B8%A4%E7%A7%8D%E6%96%B9%E5%BC%8F/top-down.png" class="" title="自顶向下">
+
+<hr>
+
+<p>这是一种可能的自顶向下C实现：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">merge</span><span class="params">(<span class="keyword">int</span> arr[], <span class="keyword">unsigned</span> sta, <span class="keyword">unsigned</span> mid, <span class="keyword">unsigned</span> <span class="built_in">end</span>)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">  <span class="keyword">int</span> tmp[<span class="built_in">end</span> - sta];</span><br><span class="line">  <span class="keyword">unsigned</span> i = sta, j = mid, k = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">while</span> (i &lt; mid &amp;&amp; j &lt; <span class="built_in">end</span>)</span><br><span class="line">  &#123;</span><br><span class="line">    tmp[k++] = arr[i] &lt; arr[j] ? arr[i++] : arr[j++];</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">while</span> (i &lt; mid)</span><br><span class="line">  &#123;</span><br><span class="line">    tmp[k++] = arr[i++];</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">while</span> (j &lt; <span class="built_in">end</span>)</span><br><span class="line">  &#123;</span><br><span class="line">    tmp[k++] = arr[j++];</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">for</span> (<span class="keyword">size_t</span> i = sta; i &lt; <span class="built_in">end</span>; i++)</span><br><span class="line">  &#123;</span><br><span class="line">    arr[i] = tmp[i - sta];</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">split_merge</span><span class="params">(<span class="keyword">int</span> arr[], <span class="keyword">unsigned</span> sta, <span class="keyword">unsigned</span> <span class="built_in">end</span>)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">  <span class="keyword">if</span> (<span class="built_in">end</span> - sta &lt; <span class="number">2</span>) <span class="keyword">return</span>;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">unsigned</span> mid = (sta + <span class="built_in">end</span>) / <span class="number">2</span>;</span><br><span class="line"></span><br><span class="line">  split_merge(arr, sta, mid);</span><br><span class="line">  split_merge(arr, mid, <span class="built_in">end</span>);</span><br><span class="line">  merge(arr, sta, mid, <span class="built_in">end</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">sort</span><span class="params">(<span class="keyword">int</span> arr[], <span class="keyword">unsigned</span> n)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">  split_merge(arr, <span class="number">0</span>, n);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="自底向上"><a href="#自底向上" class="headerlink" title="自底向上"></a>自底向上</h2><p>自底向上与自上而下相反，从单个元素开始进行merge和排序，直至所有元素被merge。</p>
+<img src="/2020/06/20/%E5%BD%92%E5%B9%B6%E6%8E%92%E5%BA%8F%E7%9A%84%E4%B8%A4%E7%A7%8D%E6%96%B9%E5%BC%8F/bottom-up.png" class="" title="自顶向下">
+
+<hr>
+
+<p>这是一种可能的自底向上C实现，它与自顶向下使用相同的merge函数：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">define</span> MIN(x, y) (((x) &lt; (y)) ? (x) : (y))</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">sort</span><span class="params">(<span class="keyword">int</span> arr[], <span class="keyword">unsigned</span> n)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">  <span class="keyword">for</span> (<span class="keyword">size_t</span> i = <span class="number">1</span>; i &lt; n; i *= <span class="number">2</span>)</span><br><span class="line">  &#123;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">size_t</span> j = <span class="number">0</span>; j &lt; n; j += <span class="number">2</span> * i)</span><br><span class="line">    &#123;</span><br><span class="line">      merge(arr, j, MIN(j+i, n), MIN(j+i*<span class="number">2</span>, n));</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>两种方式都可以实现归并排序。</p>
+<p>对于自底向上，由于免去递归，在n很大时，可以避免调用栈溢出。</p>
+
+      
+    </div>
+
+    
+      
+
+    
+
+    <footer class="article-footer">
+      <!--  -->
+      
+
+      
+        <div id="gitment"></div>
+        <link rel="stylesheet" href="//imsun.github.io/gitment/style/default.css">
+<!--        <script src="//imsun.github.io/gitment/dist/gitment.browser.js"></script>-->
+        <script src="//billts.site/js/gitment.js"></script>
+        <script>new Gitment({id:'Sat Jun 20 2020 16:36:24 GMT+0800',owner:'ZenZing',repo:'manongment',oauth:{client_id: '2e5d9dbc58e56f209b66',client_secret:'b8e259001d0b7ac23eafe7e065e8d64db0204509'}}).render('gitment')</script>
+      
+    </footer>
+  </div>
+  
+    
+  <nav id="article-nav" class="row">
+    <div class="col-sm-6">
+      
+    </div>
+    <div class="col-sm-6">
+      
+        <a href="/2020/06/25/%E5%B1%B1%E5%AF%A8%E7%89%88jackson%F0%9F%A7%90/" id="article-nav-newer" class="btn btn-outline-primary article-nav-link-wrap">
+          <span class="article-nav-title">山寨版jackson🧐</span>
+          <i class="fa fa-chevron-right pull-right"></i>
+        </a>
+      
+    </div>
+  </nav>
+
+  
+</article>
+
+<!--  -->
+
+
+        </div>
+        <div class="col-sm-3 col-sm-offset-1 blog-sidebar">
+          
+  <div class="sidebar-module p-4 mb-3 bg-light rounded">
+  <h4 class="font-italic font-weight-bolder">关于</h4>
+  <p class="mb-0">淡泊以明志，宁静以致远</p>
+</div>
+
+
+  
+  <div class="sidebar-module">
+    <h4 class="font-italic font-weight-bolder">归档</h4>
+    <ul class="sidebar-module-list"><li class="sidebar-module-list-item"><a class="sidebar-module-list-link" href="/archives/2020/06/">六月 2020</a><span class="sidebar-module-list-count">2</span></li></ul>
+  </div>
+
+
+
+
+        </div>
+    </div>
+  </div>
+  <footer class="blog-footer">
+  <div class="container">
+    <p id="footer-info" class="inner">
+      &copy; 2020 ☕<br>
+    </p>
+    <p>
+      <a href="#"><i class="fa fa-arrow-up" aria-hidden="true"></i>返回顶部</a>
+    </p>
+  </div>
+</footer>
+
+  
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+</body>
+</html>
