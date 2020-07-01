@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>二叉树札记 | ☕</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="概述数据结构中的树有很多种，但是最常见的几种本质都是二叉树，比如说：二叉搜索树、红黑树、B树等。 二叉树因为每个节点只有两个分支，因此构造起来容易，使用起来方便。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="二叉树札记">
+<meta property="og:url" content="https://ubok.net/2020/07/01/%E4%BA%8C%E5%8F%89%E6%A0%91%E6%9C%AD%E8%AE%B0/index.html">
+<meta property="og:site_name" content="☕">
+<meta property="og:description" content="概述数据结构中的树有很多种，但是最常见的几种本质都是二叉树，比如说：二叉搜索树、红黑树、B树等。 二叉树因为每个节点只有两个分支，因此构造起来容易，使用起来方便。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://ubok.net/2020/07/01/%E4%BA%8C%E5%8F%89%E6%A0%91%E6%9C%AD%E8%AE%B0/example-binary-tree.png">
+<meta property="article:published_time" content="2020-07-01T15:03:19.000Z">
+<meta property="article:modified_time" content="2020-07-01T16:08:52.419Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://ubok.net/2020/07/01/%E4%BA%8C%E5%8F%89%E6%A0%91%E6%9C%AD%E8%AE%B0/example-binary-tree.png">
+  
+    <link rel="alternate" href="/atom.xml" title="☕" type="application/atom+xml">
+  
+  
+    <link rel="icon" type="image/png" sizes="32x32" href="data:image/png;base64,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">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+
+  <link rel="stylesheet" href="//stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+
+  <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css" integrity="sha384-XdYbMnZ/QjLh6iI4ogqCTaIjrFk87ip+ekIjefZch0Y+PvJ8CDYtEs1ipDmPorQ+" crossorigin="anonymous">
+
+  
+<link rel="stylesheet" href="/css/styles.css">
+
+  
+
+<meta name="generator" content="Hexo 4.2.1"></head>
+
+<body>
+  <div class="container">
+    <header class="blog-header py-3">
+  <div class="row flex-nowrap justify-content-between align-items-center">
+    <div class="col-12 text-center">
+      <a class="blog-header-logo text-dark" href="/">⌘+C 码农</a>
+      <div class="blog-header-banner"></div>
+    </div>
+  </div>
+</header>
+    
+    <div class="nav-scroller py-1 mb-2">
+  <nav class="nav d-flex justify-content-between">
+<!--    <a class="p-2 text-muted" href="#">null</a>-->
+  </nav>
+</div>
+    <div class="row">
+        <div class="col-sm-8 blog-main">
+          <article id="post-二叉树札记" class="article article-type-post" itemscope itemprop="blogPost">
+
+  <header class="article-header">
+    
+  
+    <h1 class="article-title" itemprop="name">
+      二叉树札记
+    </h1>
+  
+
+
+  </header>
+
+  <div class="article-meta">
+    <div class="article-datetime">
+  <a href="/2020/07/01/%E4%BA%8C%E5%8F%89%E6%A0%91%E6%9C%AD%E8%AE%B0/" class="article-date"><time datetime="2020-07-01T15:03:19.000Z" itemprop="datePublished">2020-07-01</time></a>
+</div>
+
+    
+    
+
+  </div>
+  <div class="article-inner">
+
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>数据结构中的树有很多种，但是最常见的几种本质都是二叉树，比如说：二叉搜索树、红黑树、B树等。</p>
+<p>二叉树因为每个节点只有两个分支，因此构造起来容易，使用起来方便。</p>
+<a id="more"></a>
+
+<p>二叉树具有以下特性：</p>
+<ol>
+<li>第i层最多节点数为<code>2^(i-1)</code>个</li>
+<li>深度为k的二叉树最多节点数为<code>2^k-1</code>个</li>
+<li>记叶子数为n0，分支度为2的节点数为n2，则<code>n0=n2+1</code></li>
+</ol>
+<h2 id="节点的定义"><a href="#节点的定义" class="headerlink" title="节点的定义"></a>节点的定义</h2><p>一个节点具有自己的值，同时又指向自己的左节点和右节点。</p>
+<p>对于值为<code>int</code>类型的节点，C的定义方式可以如下。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> _<span class="title">node</span></span></span><br><span class="line"><span class="class">&#123;</span></span><br><span class="line">  <span class="keyword">int</span> val;</span><br><span class="line">  <span class="class"><span class="keyword">struct</span> _<span class="title">node</span> *<span class="title">left</span>, *<span class="title">rigt</span>;</span></span><br><span class="line">&#125; node;</span><br></pre></td></tr></table></figure>
+
+<h2 id="用数组构造一棵平衡二叉树"><a href="#用数组构造一棵平衡二叉树" class="headerlink" title="用数组构造一棵平衡二叉树"></a>用数组构造一棵平衡二叉树</h2><p>平衡二叉树是二叉树中较为实用的一种，它的任意节点的子树的高度差都小于或等于1。</p>
+<p>用数组构造平衡二叉树的方式可能比较多，一种常见的方式是递归，C实现如下。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">insert_node</span><span class="params">(node **tree_p, <span class="keyword">int</span> arr[], <span class="keyword">unsigned</span> n, <span class="keyword">unsigned</span> i)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">  <span class="keyword">if</span> (i &gt;= n) <span class="keyword">return</span>;</span><br><span class="line"></span><br><span class="line">  *tree_p = <span class="built_in">malloc</span>(<span class="keyword">sizeof</span>(node));</span><br><span class="line"></span><br><span class="line">  (*tree_p)-&gt;val = arr[i];</span><br><span class="line">  (*tree_p)-&gt;left = <span class="literal">NULL</span>;</span><br><span class="line">  (*tree_p)-&gt;rigt = <span class="literal">NULL</span>;</span><br><span class="line"></span><br><span class="line">  insert_node(&amp;(*tree_p)-&gt;left, arr, n, <span class="number">2</span>*i+<span class="number">1</span>);</span><br><span class="line">  insert_node(&amp;(*tree_p)-&gt;rigt, arr, n, <span class="number">2</span>*i+<span class="number">2</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>参数解释，<code>tree_p</code>是一个指向节点地址的地址；<code>n</code>是数组长度；<code>i</code>是递归索引，从0开始。</p>
+<p>当使用完一棵树后，应该递归调用<code>free</code>释放内存。</p>
+<h2 id="二叉树的遍历"><a href="#二叉树的遍历" class="headerlink" title="二叉树的遍历"></a>二叉树的遍历</h2><p>二叉树有许多遍历方式，可以如下分类：</p>
+<ul>
+<li>深度优先<ul>
+<li>前序遍历</li>
+<li>中序遍历</li>
+<li>后序遍历</li>
+</ul>
+</li>
+<li>广度优先</li>
+</ul>
+<p>对于深度优先，可以递归遍历，或是使用栈来遍历。而广度优先则可以使用队列来遍历。</p>
+<p>它们的时间复杂度和空间复杂度都是<code>O(n)</code>，n是节点数。</p>
+<p>后序遍历可以美观地打印出一棵树，比如说如下C代码。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">define</span> INDENT_STEP 4</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> PUT_SPACE(count) \</span></span><br><span class="line">  <span class="keyword">for</span> (<span class="keyword">size_t</span> i = <span class="number">0</span>; i &lt; (count); i++) \</span><br><span class="line">  &#123; \</span><br><span class="line">    <span class="built_in">putchar</span>(<span class="string">' '</span>); \</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> PRINT_NODE(tree, indent) \</span></span><br><span class="line">  PUT_SPACE(indent) \</span><br><span class="line">  <span class="keyword">if</span> ((tree)-&gt;rigt) \</span><br><span class="line">  &#123; \</span><br><span class="line">    <span class="built_in">puts</span>(<span class="string">"  /"</span>); \</span><br><span class="line">    PUT_SPACE(indent) \</span><br><span class="line">  &#125; \</span><br><span class="line">  <span class="built_in">printf</span>(<span class="string">"%d\n"</span>, (tree)-&gt;val); \</span><br><span class="line">  <span class="keyword">if</span> ((tree) -&gt; left) \</span><br><span class="line">  &#123; \</span><br><span class="line">    PUT_SPACE(indent) \</span><br><span class="line">    <span class="built_in">puts</span>(<span class="string">"  \\"</span>); \</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">print_postorder_tree</span><span class="params">(node *tree, <span class="keyword">unsigned</span> indent)</span> </span></span><br><span class="line"><span class="function"></span>&#123; </span><br><span class="line">  <span class="keyword">if</span> (tree == <span class="literal">NULL</span>) <span class="keyword">return</span>; </span><br><span class="line">  </span><br><span class="line">  print_postorder_tree(tree-&gt;rigt, indent+INDENT_STEP); </span><br><span class="line">  PRINT_NODE(tree, indent)</span><br><span class="line">  print_postorder_tree(tree-&gt;left, indent+INDENT_STEP); </span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">print_tree</span><span class="params">(node *tree)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">  print_postorder_tree(tree, <span class="number">0</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><code>print_tree</code>执行的效果会是这样：</p>
+<img src="/2020/07/01/%E4%BA%8C%E5%8F%89%E6%A0%91%E6%9C%AD%E8%AE%B0/example-binary-tree.png" class="" title="示例二叉树">
+
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>树是链表的延伸，是一种比链表复杂的数据结构。而二叉树是树里面常用的一种，具有许多用途，诸如搜索。</p>
+<p>学习构建二叉树是第一步，然后才能探索它更广阔的用途。</p>
+
+      
+    </div>
+
+    
+      
+
+    
+
+    <footer class="article-footer">
+      <!--  -->
+      
+
+      
+        <div id="gitment"></div>
+        <link rel="stylesheet" href="//imsun.github.io/gitment/style/default.css">
+<!--        <script src="//imsun.github.io/gitment/dist/gitment.browser.js"></script>-->
+        <script src="//billts.site/js/gitment.js"></script>
+        <script>new Gitment({id:'Wed Jul 01 2020 23:03:19 GMT+0800',owner:'ZenZing',repo:'manongment',oauth:{client_id: '2e5d9dbc58e56f209b66',client_secret:'b8e259001d0b7ac23eafe7e065e8d64db0204509'}}).render('gitment')</script>
+      
+    </footer>
+  </div>
+  
+    
+  <nav id="article-nav" class="row">
+    <div class="col-sm-6">
+      
+        <a href="/2020/06/25/%E5%B1%B1%E5%AF%A8%E7%89%88jackson%F0%9F%A7%90/" id="article-nav-older" class="btn btn-light article-nav-link-wrap">
+          <i class="fa fa-chevron-left pull-left"></i>
+          <span class="article-nav-title">山寨版jackson🧐</span>
+        </a>
+      
+    </div>
+    <div class="col-sm-6">
+      
+    </div>
+  </nav>
+
+  
+</article>
+
+<!--  -->
+
+
+        </div>
+        <div class="col-sm-3 col-sm-offset-1 blog-sidebar">
+          
+  <div class="sidebar-module p-4 mb-3 bg-light rounded">
+  <h4 class="font-italic font-weight-bolder">关于</h4>
+  <p class="mb-0">淡泊以明志，宁静以致远</p>
+</div>
+
+
+  
+  <div class="sidebar-module">
+    <h4 class="font-italic font-weight-bolder">归档</h4>
+    <ul class="sidebar-module-list"><li class="sidebar-module-list-item"><a class="sidebar-module-list-link" href="/archives/2020/07/">七月 2020</a><span class="sidebar-module-list-count">1</span></li><li class="sidebar-module-list-item"><a class="sidebar-module-list-link" href="/archives/2020/06/">六月 2020</a><span class="sidebar-module-list-count">2</span></li></ul>
+  </div>
+
+
+
+
+        </div>
+    </div>
+  </div>
+  <footer class="blog-footer">
+  <div class="container">
+    <p id="footer-info" class="inner">
+      &copy; 2020 ☕<br>
+    </p>
+    <p>
+      <a href="#" class="link-dark"><i class="fa fa-arrow-up" aria-hidden="true"></i>返回顶部</a>
+    </p>
+  </div>
+</footer>
+
+  
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+</body>
+</html>

@@ -51,6 +51,13 @@ code {
 .nav-pills>li>a {
   border-radius: 30px;
 }
+a.link-dark {
+  color: #333;
+}
+a.link-dark:hover {
+  color: #050505;
+  text-decoration: none;
+}
 
 /* Override Bootstrap's default container width */
 @media (min-width: 1200px) {
@@ -299,17 +306,18 @@ code {
  */
 
 .blog-footer {
-  padding: 40px 0;
+  padding: 2.5rem 0;
   color: #999;
   text-align: center;
   background-color: #f9f9f9;
-  border-top: 1px solid #e5e5e5;
+  border-top: .05rem solid #e5e5e5;
 }
 .blog-footer p:last-child {
   margin-bottom: 0;
 }
 
 /* Blog Example */
+/* TODO: merge example style into old style */
 
 .blog-header {
   line-height: 1;
@@ -400,20 +408,6 @@ h1, h2, h3, h4, h5, h6 {
 .blog-post-meta {
   margin-bottom: 1.25rem;
   color: #999;
-}
-
-/*
- * Footer
- */
-.blog-footer {
-  padding: 2.5rem 0;
-  color: #999;
-  text-align: center;
-  background-color: #f9f9f9;
-  border-top: .05rem solid #e5e5e5;
-}
-.blog-footer p:last-child {
-  margin-bottom: 0;
 }
 
 
