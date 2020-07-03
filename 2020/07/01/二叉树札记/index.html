@@ -5,16 +5,16 @@
   
   <title>二叉树札记 | ☕</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="概述数据结构中的树有很多种，但是最常见的几种本质都是二叉树，比如说：二叉搜索树、红黑树、B树等。 二叉树因为每个节点只有两个分支，因此构造起来容易，使用起来方便。">
+  <meta name="description" content="概述数据结构中的树有很多种，但是最常见的几种本质都是二叉树，比如说：红黑树、B树等。 二叉树因为每个结点只有两个分支，因此构造起来容易，使用起来方便。">
 <meta property="og:type" content="article">
 <meta property="og:title" content="二叉树札记">
 <meta property="og:url" content="https://ubok.net/2020/07/01/%E4%BA%8C%E5%8F%89%E6%A0%91%E6%9C%AD%E8%AE%B0/index.html">
 <meta property="og:site_name" content="☕">
-<meta property="og:description" content="概述数据结构中的树有很多种，但是最常见的几种本质都是二叉树，比如说：二叉搜索树、红黑树、B树等。 二叉树因为每个节点只有两个分支，因此构造起来容易，使用起来方便。">
+<meta property="og:description" content="概述数据结构中的树有很多种，但是最常见的几种本质都是二叉树，比如说：红黑树、B树等。 二叉树因为每个结点只有两个分支，因此构造起来容易，使用起来方便。">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://ubok.net/2020/07/01/%E4%BA%8C%E5%8F%89%E6%A0%91%E6%9C%AD%E8%AE%B0/example-binary-tree.png">
 <meta property="article:published_time" content="2020-07-01T15:03:19.000Z">
-<meta property="article:modified_time" content="2020-07-03T06:10:12.338Z">
+<meta property="article:modified_time" content="2020-07-03T13:43:58.505Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https://ubok.net/2020/07/01/%E4%BA%8C%E5%8F%89%E6%A0%91%E6%9C%AD%E8%AE%B0/example-binary-tree.png">
   
@@ -82,29 +82,29 @@
 
     <div class="article-entry" itemprop="articleBody">
       
-        <h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>数据结构中的树有很多种，但是最常见的几种本质都是二叉树，比如说：二叉搜索树、红黑树、B树等。</p>
-<p>二叉树因为每个节点只有两个分支，因此构造起来容易，使用起来方便。</p>
+        <h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>数据结构中的树有很多种，但是最常见的几种本质都是二叉树，比如说：红黑树、B树等。</p>
+<p>二叉树因为每个结点只有两个分支，因此构造起来容易，使用起来方便。</p>
 <a id="more"></a>
 
-<p>二叉树具有以下特性：</p>
+<p>二叉树具有以下规律：</p>
 <ol>
-<li>第i层最多节点数为<code>2^(i-1)</code>个</li>
-<li>深度为k的二叉树最多节点数为<code>2^k-1</code>个</li>
-<li>记叶子数为n0，分支度为2的节点数为n2，则<code>n0=n2+1</code></li>
+<li>第i层最多结点数为<code>2^(i-1)</code>个</li>
+<li>深度为k的二叉树最多结点数为<code>2^k-1</code>个</li>
+<li>记叶子数为n0，分支度为2的结点数为n2，则<code>n0=n2+1</code></li>
 </ol>
-<h2 id="节点的定义"><a href="#节点的定义" class="headerlink" title="节点的定义"></a>节点的定义</h2><p>一个节点具有自己的值，同时又指向自己的左节点和右节点。</p>
-<p>对于值为<code>int</code>类型的节点，C的定义方式可以如下。</p>
+<h2 id="结点的定义"><a href="#结点的定义" class="headerlink" title="结点的定义"></a>结点的定义</h2><p>一个结点具有自己的值，同时又指向自己的左结点和右结点。</p>
+<p>对于值为<code>int</code>类型的结点，C的定义方式可以如下。</p>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> _<span class="title">node</span></span></span><br><span class="line"><span class="class">&#123;</span></span><br><span class="line">  <span class="keyword">int</span> val;</span><br><span class="line">  <span class="class"><span class="keyword">struct</span> _<span class="title">node</span> *<span class="title">left</span>, *<span class="title">rigt</span>;</span></span><br><span class="line">&#125; node;</span><br></pre></td></tr></table></figure>
 
-<h2 id="用数组构造一棵平衡二叉树"><a href="#用数组构造一棵平衡二叉树" class="headerlink" title="用数组构造一棵平衡二叉树"></a>用数组构造一棵平衡二叉树</h2><p>平衡二叉树是二叉树中较为实用的一种，它的任意节点的子树的高度差都小于或等于1。</p>
+<h2 id="用数组构造一棵平衡二叉树"><a href="#用数组构造一棵平衡二叉树" class="headerlink" title="用数组构造一棵平衡二叉树"></a>用数组构造一棵平衡二叉树</h2><p>平衡二叉树是二叉树中较为实用的一种，它的任意结点的子树的高度差都小于或等于1。</p>
 <p>用数组构造平衡二叉树的方式可能比较多，如下是依顺序逐层构造二叉树的C实现。</p>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">insert_node</span><span class="params">(node **tree_p, <span class="keyword">int</span> arr[], <span class="keyword">unsigned</span> i, <span class="keyword">unsigned</span> n)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">  <span class="keyword">if</span> (i &gt;= n) <span class="keyword">return</span>;</span><br><span class="line"></span><br><span class="line">  *tree_p = <span class="built_in">malloc</span>(<span class="keyword">sizeof</span>(node));</span><br><span class="line">  (*tree_p)-&gt;val = arr[i];</span><br><span class="line">  (*tree_p)-&gt;left = <span class="literal">NULL</span>;</span><br><span class="line">  (*tree_p)-&gt;rigt = <span class="literal">NULL</span>;</span><br><span class="line"></span><br><span class="line">  insert_node(&amp;(*tree_p)-&gt;left, arr, <span class="number">2</span>*i+<span class="number">1</span>, n);</span><br><span class="line">  insert_node(&amp;(*tree_p)-&gt;rigt, arr, <span class="number">2</span>*i+<span class="number">2</span>, n);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-<p>参数解释，<code>tree_p</code>是一个指向节点指针的指针，此参数也可重构为函数返回值；<code>i</code>是递归索引，从0开始；<code>n</code>是数组长度。</p>
+<p>参数解释，<code>tree_p</code>是一个指向结点指针的指针，此参数也可重构为函数返回值；<code>i</code>是递归索引，从0开始；<code>n</code>是数组长度。</p>
 <h2 id="构造一棵平衡二叉搜索树"><a href="#构造一棵平衡二叉搜索树" class="headerlink" title="构造一棵平衡二叉搜索树"></a>构造一棵平衡二叉搜索树</h2><p>如果稍加调整，就可以构造一棵平衡二叉搜索树。</p>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">insert_bst_node</span><span class="params">(node **tree_p, <span class="keyword">int</span> arr[], <span class="keyword">unsigned</span> sta, <span class="keyword">unsigned</span> <span class="built_in">end</span>)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">  <span class="keyword">if</span> (sta &gt;= <span class="built_in">end</span>) <span class="keyword">return</span>;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">unsigned</span> mid = (sta + <span class="built_in">end</span>) / <span class="number">2</span>;</span><br><span class="line"></span><br><span class="line">  *tree_p = <span class="built_in">malloc</span>(<span class="keyword">sizeof</span>(node));</span><br><span class="line">  (*tree_p)-&gt;val = arr[mid];</span><br><span class="line">  (*tree_p)-&gt;left = <span class="literal">NULL</span>;</span><br><span class="line">  (*tree_p)-&gt;rigt = <span class="literal">NULL</span>;</span><br><span class="line"></span><br><span class="line">  insert_bst_node(&amp;(*tree_p)-&gt;left, arr, sta, mid);</span><br><span class="line">  insert_bst_node(&amp;(*tree_p)-&gt;rigt, arr, mid+<span class="number">1</span>, <span class="built_in">end</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-<p>给定一个排序好的数组<code>arr</code>，我们将其中间值设为根节点。</p>
+<p>给定一个排序好的数组<code>arr</code>，我们将其中间值设为根结点。</p>
 <p>然后递归地对其左半部分和右半部分进行类似操作，即可得到一棵平衡二叉搜索树。</p>
 <p>注意，当使用完一棵树后，应该递归调用<code>free</code>释放内存。</p>
 <h2 id="二叉搜索树的搜索"><a href="#二叉搜索树的搜索" class="headerlink" title="二叉搜索树的搜索"></a>二叉搜索树的搜索</h2><p>二叉搜索树的搜索效率较高，最坏时间复杂度为<code>O(h)</code>，其中h是树的高度。</p>
@@ -122,7 +122,7 @@
 <li>广度优先</li>
 </ul>
 <p>对于深度优先，可以递归遍历，或是使用栈来遍历。而广度优先则可以使用队列来遍历。</p>
-<p>它们的时间复杂度和空间复杂度都是<code>O(n)</code>，n是节点数。</p>
+<p>它们的时间复杂度和空间复杂度都是<code>O(n)</code>，n是结点数。</p>
 <p>后序遍历可以美观地打印出一棵树，比如说如下C代码。</p>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">define</span> INDENT_STEP 4</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> PUT_SPACE(count) \</span></span><br><span class="line">  <span class="keyword">for</span> (<span class="keyword">size_t</span> i = <span class="number">0</span>; i &lt; (count); i++) \</span><br><span class="line">  &#123; \</span><br><span class="line">    <span class="built_in">putchar</span>(<span class="string">' '</span>); \</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> PRINT_NODE(tree, indent) \</span></span><br><span class="line">  PUT_SPACE(indent) \</span><br><span class="line">  <span class="keyword">if</span> ((tree)-&gt;rigt) \</span><br><span class="line">  &#123; \</span><br><span class="line">    <span class="built_in">puts</span>(<span class="string">"  /"</span>); \</span><br><span class="line">    PUT_SPACE(indent) \</span><br><span class="line">  &#125; \</span><br><span class="line">  <span class="built_in">printf</span>(<span class="string">"%d\n"</span>, (tree)-&gt;val); \</span><br><span class="line">  <span class="keyword">if</span> ((tree) -&gt; left) \</span><br><span class="line">  &#123; \</span><br><span class="line">    PUT_SPACE(indent) \</span><br><span class="line">    <span class="built_in">puts</span>(<span class="string">"  \\"</span>); \</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">print_postorder_tree</span><span class="params">(node *tree, <span class="keyword">unsigned</span> indent)</span> </span></span><br><span class="line"><span class="function"></span>&#123; </span><br><span class="line">  <span class="keyword">if</span> (tree == <span class="literal">NULL</span>) <span class="keyword">return</span>; </span><br><span class="line">  </span><br><span class="line">  print_postorder_tree(tree-&gt;rigt, indent+INDENT_STEP); </span><br><span class="line">  PRINT_NODE(tree, indent)</span><br><span class="line">  print_postorder_tree(tree-&gt;left, indent+INDENT_STEP); </span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">print_tree</span><span class="params">(node *tree)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">  print_postorder_tree(tree, <span class="number">0</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
