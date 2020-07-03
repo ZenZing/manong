@@ -254,6 +254,10 @@ a.link-dark:hover {
     float: none;
     margin-top: 1rem;
   }
+
+  .sidebar-module.rounded {
+    border-radius: 0 !important;
+  }
 }
 
 /* article footer content */
