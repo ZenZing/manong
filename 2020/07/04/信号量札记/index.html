@@ -8,12 +8,12 @@
   <meta name="description" content="概述信号量是并发编程中的基本概念，由荷兰计算机科学家Dijkstra发明。简单来说，它是一种变量，用于控制多个进程对公共资源的访问。 其中，允许计数任意资源的信号量称为计数信号量，而将值限制为0和1的信号量称为二进制信号量，也就是锁。">
 <meta property="og:type" content="article">
 <meta property="og:title" content="信号量札记">
-<meta property="og:url" content="https://ubok.net/2020/07/04/%E4%BF%A1%E5%8F%B7%E9%87%8F%E6%9C%AD%E8%AE%B0/index.html">
+<meta property="og:url" content="http://ubok.net/2020/07/04/%E4%BF%A1%E5%8F%B7%E9%87%8F%E6%9C%AD%E8%AE%B0/index.html">
 <meta property="og:site_name" content="☕">
 <meta property="og:description" content="概述信号量是并发编程中的基本概念，由荷兰计算机科学家Dijkstra发明。简单来说，它是一种变量，用于控制多个进程对公共资源的访问。 其中，允许计数任意资源的信号量称为计数信号量，而将值限制为0和1的信号量称为二进制信号量，也就是锁。">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2020-07-04T06:20:30.000Z">
-<meta property="article:modified_time" content="2020-07-04T07:44:02.998Z">
+<meta property="article:modified_time" content="2020-07-05T08:48:05.290Z">
 <meta name="twitter:card" content="summary">
   
     <link rel="alternate" href="/atom.xml" title="☕" type="application/atom+xml">
@@ -116,7 +116,7 @@
 <p>比如说下面这段C代码，一个线程负责计算斐波那契数列（生产），另一个则负责打印（消费）。</p>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">define</span> MAX 94</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">static</span> <span class="keyword">unsigned</span> <span class="keyword">long</span> <span class="keyword">long</span> fib_x = <span class="number">0</span>;</span><br><span class="line"><span class="keyword">static</span> <span class="keyword">sem_t</span> mutex_fib;</span><br><span class="line"><span class="keyword">static</span> <span class="keyword">sem_t</span> mutex_print;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> *<span class="title">fib</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">  sem_post(&amp;mutex_print);</span><br><span class="line"></span><br><span class="line">  <span class="keyword">unsigned</span> <span class="keyword">long</span> <span class="keyword">long</span> fib_1 = <span class="number">1</span>, fib_2 = <span class="number">1</span>;</span><br><span class="line">  <span class="keyword">for</span> (<span class="keyword">size_t</span> i = <span class="number">1</span>; i &lt; MAX; i++)</span><br><span class="line">  &#123;</span><br><span class="line">    sem_wait(&amp;mutex_fib);</span><br><span class="line">    fib_x = i &lt;= <span class="number">2</span> ? <span class="number">1</span> : fib_1 + fib_2;</span><br><span class="line">    fib_1 = fib_2;</span><br><span class="line">    fib_2 = fib_x;</span><br><span class="line">    sem_post(&amp;mutex_print);</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> <span class="literal">NULL</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> *<span class="title">print</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">  <span class="keyword">for</span> (<span class="keyword">size_t</span> i = <span class="number">0</span>; i &lt; MAX; i++)</span><br><span class="line">  &#123;</span><br><span class="line">    sem_wait(&amp;mutex_print);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">"fib(%zu) = %llu\n"</span>, i + <span class="number">1</span>, fib_x);</span><br><span class="line">    sem_post(&amp;mutex_fib);</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> <span class="literal">NULL</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-<p>提示：由于<code>unsigned long long</code>在AMD64系统上最长64位限制，这里只求到第94个斐波那契数。求斐波那契数时采用了动态规划第思想，自底向上求解，时间复杂度<code>O(n)</code>，空间复杂度<code>O(1)</code>。</p>
+<p>提示：由于<code>unsigned long long</code>在AMD64系统上最长64位限制，这里只求到第94个斐波那契数。求斐波那契数时采用了动态规划的思想，自底向上求解，时间复杂度<code>O(n)</code>，空间复杂度<code>O(1)</code>。</p>
 <p>代码中，<code>sem_wait</code>就是P操作，<code>sem_post</code>就是V操作。</p>
 <p>信号量<code>mutex_print</code>和<code>mutex_fib</code>初始值都是0。在<code>fib</code>线程开始执行时，主动将<code>mutex_print</code>加1，迫使<code>print</code>率先执行。之后二者将形成生产/消费关系，交替执行。</p>
 <p>执行结果如下所示。</p>
@@ -155,7 +155,9 @@ fib(12) = 89
         <div id="gitment"></div>
         <link rel="stylesheet" href="//imsun.github.io/gitment/style/default.css">
 <!--        <script src="//imsun.github.io/gitment/dist/gitment.browser.js"></script>-->
-        <script src="//billts.site/js/gitment.js"></script>
+        
+<script src="/js/gitment.js"></script>
+
         <script>new Gitment({id:'Sat Jul 04 2020 14:20:30 GMT+0800',owner:'ZenZing',repo:'manongment',oauth:{client_id: '2e5d9dbc58e56f209b66',client_secret:'b8e259001d0b7ac23eafe7e065e8d64db0204509'}}).render('gitment')</script>
       
     </footer>
