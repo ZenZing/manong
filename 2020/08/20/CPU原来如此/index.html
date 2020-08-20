@@ -3,16 +3,20 @@
 <head>
   <meta charset="utf-8">
   
-  <title>Archives: 2020/6 | ☕</title>
+  <title>CPU原来如此 | ☕</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="淡泊以明志，宁静以致远">
-<meta property="og:type" content="website">
-<meta property="og:title" content="☕">
-<meta property="og:url" content="https://ubok.net/archives/2020/06/index.html">
+  <meta name="description" content="概述目前常见的CPU，无论是x86、ARM或MIPS架构，均是建立在冯诺伊曼体系下的。 简单理解，冯诺伊曼体系计算机有以下几个部件组成：  运算器（ALU） 控制器（Controller） 存储器（Memory） 和输入输出（I&#x2F;O）">
+<meta property="og:type" content="article">
+<meta property="og:title" content="CPU原来如此">
+<meta property="og:url" content="https://ubok.net/2020/08/20/CPU%E5%8E%9F%E6%9D%A5%E5%A6%82%E6%AD%A4/index.html">
 <meta property="og:site_name" content="☕">
-<meta property="og:description" content="淡泊以明志，宁静以致远">
+<meta property="og:description" content="概述目前常见的CPU，无论是x86、ARM或MIPS架构，均是建立在冯诺伊曼体系下的。 简单理解，冯诺伊曼体系计算机有以下几个部件组成：  运算器（ALU） 控制器（Controller） 存储器（Memory） 和输入输出（I&#x2F;O）">
 <meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://ubok.net/2020/08/20/CPU%E5%8E%9F%E6%9D%A5%E5%A6%82%E6%AD%A4/cpu-introduction.png">
+<meta property="article:published_time" content="2020-08-20T09:41:21.000Z">
+<meta property="article:modified_time" content="2020-08-20T11:11:05.160Z">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://ubok.net/2020/08/20/CPU%E5%8E%9F%E6%9D%A5%E5%A6%82%E6%AD%A4/cpu-introduction.png">
   
     <link rel="alternate" href="/atom.xml" title="☕" type="application/atom+xml">
   
@@ -52,62 +56,99 @@
 </div>
     <div class="row">
         <div class="col-sm-8 blog-main">
-          
-  
-  
-    
-    
-      
-      
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/archives/2020" class="archive-year">2020</a>
-        </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <header class="archive-article-header">
+          <article id="post-CPU原来如此" class="article article-type-post" itemscope itemprop="blogPost">
+
+  <header class="article-header">
     
   
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2020/06/25/%E5%B1%B1%E5%AF%A8%E7%89%88jackson%F0%9F%A7%90/">山寨版jackson🧐</a>
+    <h1 class="article-title" itemprop="name">
+      CPU原来如此
     </h1>
   
 
 
+  </header>
+
+  <div class="article-meta">
     <div class="article-datetime">
-  <a href="/2020/06/25/%E5%B1%B1%E5%AF%A8%E7%89%88jackson%F0%9F%A7%90/" class="archive-article-date"><time datetime="2020-06-24T16:00:19.000Z" itemprop="datePublished">六月 25日</time></a>
+  <a href="/2020/08/20/CPU%E5%8E%9F%E6%9D%A5%E5%A6%82%E6%AD%A4/" class="article-date"><time datetime="2020-08-20T09:41:21.000Z" itemprop="datePublished">2020-08-20</time></a>
 </div>
 
-  </header>
+    
+    
+
+  </div>
+  <div class="article-inner">
+
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>目前常见的CPU，无论是x86、ARM或MIPS架构，均是建立在冯诺伊曼体系下的。</p>
+<p>简单理解，冯诺伊曼体系计算机有以下几个部件组成：</p>
+<ol>
+<li>运算器（ALU）</li>
+<li>控制器（Controller）</li>
+<li>存储器（Memory）</li>
+<li>和输入输出（I/O）</li>
+</ol>
+<a id="more"></a>
+
+<p>其中运算器负责运算；控制器协调指令和数据；存储器存储指令和数据；输入输出为外设，比如硬盘、键盘、网卡，毕竟CPU是需要为外界服务的。</p>
+<p>演进至今，冯诺伊曼计算机已经具有强大的计算能力，许多CPU引入了流水线、分支预测、乱序执行等策略，提高了CPU的部件利用率和计算力。</p>
+<h2 id="从一个简单程序开始"><a href="#从一个简单程序开始" class="headerlink" title="从一个简单程序开始"></a>从一个简单程序开始</h2><img src="/2020/08/20/CPU%E5%8E%9F%E6%9D%A5%E5%A6%82%E6%AD%A4/cpu-introduction.png" class="" title="CPU原理浅析">
+
+<p>如上图，我们定义了一个简单C程序，负责计算<code>1+2</code>的值，并保存到一个变量<code>a</code>里。为了简单，这个小程序没有I/O操作。</p>
+<p>直接的C指令CPU是无法执行的，因为它不认识C字符。因此需要经过编译器编译为汇编指令，汇编再经过汇编器转为机器指令，如果引用了外部库，可能还需要链接这一步骤，但是此处不需要。</p>
+<p>有了机器指令，就可以让CPU执行了。但是我们的机器指令存储在外设硬盘上，还需要经过DMA设备将指令载入内存，内存里的东西CPU就能通过寻址拿到了。</p>
+<p>内存里存有数据和指令，这些东西都会通过系统总线拿到CPU里。</p>
+<p>指令到达CPU后，首先会被译码，操作码将被转换为相关计算行为，而操作数将载入寄存器，最终由ALU计算处理。</p>
+<p>ALU计算完毕后，一部分中间数据会写回寄存器，访问寄存器比访问存储器快很多，最终结果将写回存储器。在这个🌰里，汇编指令<code>mov %ecx,-0x4(%rbp)</code>对应的机器码就是告诉CPU将结果写回内存变量<code>a</code>。</p>
+<p>CPU内部有个时钟，用于周期性发射脉冲信号，控制CPU对指令顺序执行。在最简单的情况下，一个脉冲执行一条指令。</p>
+<h2 id="更复杂的构造"><a href="#更复杂的构造" class="headerlink" title="更复杂的构造"></a>更复杂的构造</h2><p>以上示例只是最简单的情况，当有I/O时，会复杂许多。</p>
+<p>目前，许多CPU加入了流水线、分支预测、乱序执行等功能，大大提升了CPU性能。比如，在本文的示例CPU中，同一时刻只有一个部件在工作，加入流水线可让很好地避免这一问题。</p>
+<p>同时，提高指令缓存和数据缓存，增加多级缓存，改进缓存读写策略，都能提高CPU计算效率，这里将不深入展开。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>现在，我们了解了CPU的基本原理。</p>
+<p>高级的程序语言必须通过编译汇编，转化为CPU指令。通过CPU译码，控制器处理，运算器计算，最后回写。如此，经过若干个时钟周期后，一个程序才算执行完毕了。</p>
+
+      
+    </div>
+
+    
+      
+
+    
+
+    <footer class="article-footer">
+      <!--  -->
+      
+
+      
+        <div id="gitment"></div>
+        <link rel="stylesheet" href="//imsun.github.io/gitment/style/default.css">
+        <script src="//cdn.jsdelivr.net/gh/theme-next/theme-next-gitment@1/gitment.browser.js"></script>
+        <script>new Gitment({id:'Thu Aug 20 2020 17:41:21 GMT+0800',owner:'ZenZing',repo:'manongment',oauth:{client_id: '2e5d9dbc58e56f209b66',client_secret:'b8e259001d0b7ac23eafe7e065e8d64db0204509'}}).render('gitment')</script>
+      
+    </footer>
+  </div>
+  
+    
+  <nav id="article-nav" class="row">
+    <div class="col-sm-6">
+      
+        <a href="/2020/07/04/%E4%BF%A1%E5%8F%B7%E9%87%8F%E6%9C%AD%E8%AE%B0/" id="article-nav-older" class="btn btn-light article-nav-link-wrap">
+          <i class="fa fa-chevron-left pull-left"></i>
+          <span class="article-nav-title">信号量札记</span>
+        </a>
+      
+    </div>
+    <div class="col-sm-6">
+      
+    </div>
+  </nav>
+
+  
 </article>
 
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <header class="archive-article-header">
-    
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2020/06/20/%E5%BD%92%E5%B9%B6%E6%8E%92%E5%BA%8F%E7%9A%84%E4%B8%A4%E7%A7%8D%E6%96%B9%E5%BC%8F/">归并排序的两种方式</a>
-    </h1>
-  
-
-
-    <div class="article-datetime">
-  <a href="/2020/06/20/%E5%BD%92%E5%B9%B6%E6%8E%92%E5%BA%8F%E7%9A%84%E4%B8%A4%E7%A7%8D%E6%96%B9%E5%BC%8F/" class="archive-article-date"><time datetime="2020-06-20T08:36:24.000Z" itemprop="datePublished">六月 20日</time></a>
-</div>
-
-  </header>
-</article>
-
-  
-  
-    </div></section>
-  
-
-
+<!--  -->
 
 
         </div>
