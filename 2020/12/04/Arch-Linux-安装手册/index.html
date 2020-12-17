@@ -3,16 +3,20 @@
 <head>
   <meta charset="utf-8">
   
-  <title>Archives: 2020 | 简单的博客</title>
+  <title>Arch Linux 安装手册 | 简单的博客</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="因求生存而技术，因为生活而记录。">
-<meta property="og:type" content="website">
-<meta property="og:title" content="简单的博客">
-<meta property="og:url" content="https://ubok.net/archives/2020/index.html">
+  <meta name="description" content="概述Arch Linux 是很多极客所热衷的 Linux 发行版。其特点是：简洁。 本日志参考 Arch 官方文档，整理了快速安装一个 Arch 环境的步骤。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Arch Linux 安装手册">
+<meta property="og:url" content="https://ubok.net/2020/12/04/Arch-Linux-%E5%AE%89%E8%A3%85%E6%89%8B%E5%86%8C/index.html">
 <meta property="og:site_name" content="简单的博客">
-<meta property="og:description" content="因求生存而技术，因为生活而记录。">
+<meta property="og:description" content="概述Arch Linux 是很多极客所热衷的 Linux 发行版。其特点是：简洁。 本日志参考 Arch 官方文档，整理了快速安装一个 Arch 环境的步骤。">
 <meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://ubok.net/2020/12/04/Arch-Linux-%E5%AE%89%E8%A3%85%E6%89%8B%E5%86%8C/Arch%20Linux%20Success.png">
+<meta property="article:published_time" content="2020-12-04T10:14:44.000Z">
+<meta property="article:modified_time" content="2020-12-08T08:58:36.643Z">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://ubok.net/2020/12/04/Arch-Linux-%E5%AE%89%E8%A3%85%E6%89%8B%E5%86%8C/Arch%20Linux%20Success.png">
   
     <link rel="alternate" href="/atom.xml" title="简单的博客" type="application/atom+xml">
   
@@ -51,122 +55,123 @@
 </div>
     <div class="row">
         <div class="col-sm-8 blog-main">
-          
-  
-  
+          <article id="post-Arch-Linux-安装手册" class="article article-type-post" itemscope itemprop="blogPost">
+
+  <header class="article-header">
     
+  
+    <h1 class="article-title" itemprop="name">
+      Arch Linux 安装手册
+    </h1>
+  
+
+
+  </header>
+
+  <div class="article-meta">
+    <div class="article-datetime">
+  <a href="/2020/12/04/Arch-Linux-%E5%AE%89%E8%A3%85%E6%89%8B%E5%86%8C/" class="article-date"><time datetime="2020-12-04T10:14:44.000Z" itemprop="datePublished">2020-12-04</time></a>
+</div>
+
+    
+    
+
+  </div>
+  <div class="article-inner">
+
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>Arch Linux 是很多极客所热衷的 Linux 发行版。其特点是：<strong>简洁</strong>。</p>
+<p>本日志参考 Arch 官方文档，整理了快速安装一个 Arch 环境的步骤。</p>
+<a id="more"></a>
+
+<h2 id="下载镜像"><a href="#下载镜像" class="headerlink" title="下载镜像"></a>下载镜像</h2><p>可以到 <a href="https://www.archlinux.org/" target="_blank" rel="noopener">Arch 官网</a> 下载最新镜像。</p>
+<h2 id="开始安装"><a href="#开始安装" class="headerlink" title="开始安装"></a>开始安装</h2><p>首先保证有网。</p>
+<p>通过 CD/USB 引导进入镜像的 Linux 环境。</p>
+<h3 id="分区"><a href="#分区" class="headerlink" title="分区"></a>分区</h3><p>使用 <code>fdisk</code> 分区，对于 MBR BIOS，至少保证以下两个分区：</p>
+<ul>
+<li>root_partition: /</li>
+<li>swap_partition: swap</li>
+</ul>
+<p>对于 GPT UEFI，应该增加 EFI 分区。</p>
+<p>可依据具体情况增设 <code>/home</code> 等分区。</p>
+<p>接下来用 BIOS 引导，不考虑 EFI。</p>
+<h3 id="格式化"><a href="#格式化" class="headerlink" title="格式化"></a>格式化</h3><p>使用 <code>mkfs</code> 格式化根目录为 ext4 格式。</p>
+<p><em># mkfs.ext4 /dev/root_partition</em></p>
+<p>格式化交换分区：</p>
+<p><em># mkswap /dev/swap_partition</em></p>
+<h3 id="挂载"><a href="#挂载" class="headerlink" title="挂载"></a>挂载</h3><p>挂载 root 分区到安装环境的 /mnt。</p>
+<p><em># mount /dev/root_partition /mnt</em></p>
+<p>然后可挂载交换分区。</p>
+<p><em># swapon /dev/swap_partition</em></p>
+<h3 id="安装基础包"><a href="#安装基础包" class="headerlink" title="安装基础包"></a>安装基础包</h3><p>安装基础包到 /mnt。</p>
+<p><em># pacstrap /mnt base linux linux-firmware</em></p>
+<h2 id="配置"><a href="#配置" class="headerlink" title="配置"></a>配置</h2><p>到此，安装结束。对系统进行简单配置。</p>
+<h3 id="Fstab"><a href="#Fstab" class="headerlink" title="Fstab"></a>Fstab</h3><p><em># genfstab -U /mnt &gt;&gt; /mnt/etc/fstab</em></p>
+<h3 id="Chroot"><a href="#Chroot" class="headerlink" title="Chroot"></a>Chroot</h3><p><em># arch-chroot /mnt</em></p>
+<h3 id="Timezone"><a href="#Timezone" class="headerlink" title="Timezone"></a>Timezone</h3><p><em># ln -sf /usr/share/zoneinfo/Region/City /etc/localtime</em></p>
+<p>生成 <code>/etc/adjtime</code>。</p>
+<p><em># hwclock –systohc</em></p>
+<h3 id="Localization"><a href="#Localization" class="headerlink" title="Localization"></a>Localization</h3><p><em># locale-gen</em></p>
+<p>创建 <code>/etc/local.conf</code>。</p>
+<p><em># echo ‘LANG=en_US.UTF-8’ &gt; /etc/locale.conf</em></p>
+<h3 id="Network"><a href="#Network" class="headerlink" title="Network"></a>Network</h3><p><em># echo ‘myhost’ &gt; /etc/hostname</em></p>
+<p>然后：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">echo</span> -e <span class="string">'127.0.0.1	localhost\n</span></span><br><span class="line"><span class="string">::1		localhost\n</span></span><br><span class="line"><span class="string">127.0.1.1	myhost.localdomain	myhost\n'</span> &gt; /etc/hosts</span><br></pre></td></tr></table></figure>
+
+<h3 id="Root-Passwd"><a href="#Root-Passwd" class="headerlink" title="Root Passwd"></a>Root Passwd</h3><p><em># passwd</em></p>
+<h2 id="GRUB-引导"><a href="#GRUB-引导" class="headerlink" title="GRUB 引导"></a>GRUB 引导</h2><h3 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h3><p>安装 GRUB。</p>
+<p><em># pacman -Sy grub</em></p>
+<h3 id="配置-1"><a href="#配置-1" class="headerlink" title="配置"></a>配置</h3><p><em># grub-install /dev/device_name</em></p>
+<p>然后：</p>
+<p><em># grub-mkconfig -o /boot/grub/grub.cfg</em></p>
+<h2 id="大功告成"><a href="#大功告成" class="headerlink" title="大功告成"></a>大功告成</h2><p>弹出安装介质，重启机器。</p>
+<p>Arch Linux 启动成功：</p>
+<img src="/2020/12/04/Arch-Linux-%E5%AE%89%E8%A3%85%E6%89%8B%E5%86%8C/Arch%20Linux%20Success.png" class="" title="Arch 启动成功">
+
+<br>
+
+<p>更多请参考官方文档。</p>
+
+      
+    </div>
+
     
       
+
+    
+
+    <footer class="article-footer">
+      <!--  -->
       
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/archives/2020" class="archive-year">2020</a>
-        </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <header class="archive-article-header">
-    
+
+      
+        <div id="gitment"></div>
+        <script src="//cdn.jsdelivr.net/gh/theme-next/theme-next-gitment@1/gitment.browser.js"></script>
+        <script>new Gitment({id:'Fri Dec 04 2020 18:14:44 GMT+0800',owner:'ZenZing',repo:'manongment',oauth:{client_id: '2e5d9dbc58e56f209b66',client_secret:'b8e259001d0b7ac23eafe7e065e8d64db0204509'}}).render('gitment')</script>
+      
+    </footer>
+  </div>
   
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2020/12/04/Arch-Linux-%E5%AE%89%E8%A3%85%E6%89%8B%E5%86%8C/">Arch Linux 安装手册</a>
-    </h1>
+    
+  <nav id="article-nav" class="row">
+    <div class="col-sm-6">
+      
+        <a href="/2020/08/20/CPU%E5%8E%9F%E6%9D%A5%E5%A6%82%E6%AD%A4/" id="article-nav-older" class="btn btn-light article-nav-link-wrap">
+          <i class="fa fa-chevron-left pull-left"></i>
+          <span class="article-nav-title">CPU原来如此</span>
+        </a>
+      
+    </div>
+    <div class="col-sm-6">
+      
+    </div>
+  </nav>
+
   
-
-
-    <div class="article-datetime">
-  <a href="/2020/12/04/Arch-Linux-%E5%AE%89%E8%A3%85%E6%89%8B%E5%86%8C/" class="archive-article-date"><time datetime="2020-12-04T10:14:44.000Z" itemprop="datePublished">十二月 4日</time></a>
-</div>
-
-  </header>
 </article>
 
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <header class="archive-article-header">
-    
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2020/08/20/CPU%E5%8E%9F%E6%9D%A5%E5%A6%82%E6%AD%A4/">CPU原来如此</a>
-    </h1>
-  
-
-
-    <div class="article-datetime">
-  <a href="/2020/08/20/CPU%E5%8E%9F%E6%9D%A5%E5%A6%82%E6%AD%A4/" class="archive-article-date"><time datetime="2020-08-20T09:41:21.000Z" itemprop="datePublished">八月 20日</time></a>
-</div>
-
-  </header>
-</article>
-
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <header class="archive-article-header">
-    
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2020/07/04/%E4%BF%A1%E5%8F%B7%E9%87%8F%E6%9C%AD%E8%AE%B0/">信号量札记</a>
-    </h1>
-  
-
-
-    <div class="article-datetime">
-  <a href="/2020/07/04/%E4%BF%A1%E5%8F%B7%E9%87%8F%E6%9C%AD%E8%AE%B0/" class="archive-article-date"><time datetime="2020-07-04T06:20:30.000Z" itemprop="datePublished">七月 4日</time></a>
-</div>
-
-  </header>
-</article>
-
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <header class="archive-article-header">
-    
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2020/07/01/%E4%BA%8C%E5%8F%89%E6%A0%91%E6%9C%AD%E8%AE%B0/">二叉树札记</a>
-    </h1>
-  
-
-
-    <div class="article-datetime">
-  <a href="/2020/07/01/%E4%BA%8C%E5%8F%89%E6%A0%91%E6%9C%AD%E8%AE%B0/" class="archive-article-date"><time datetime="2020-07-01T15:03:19.000Z" itemprop="datePublished">七月 1日</time></a>
-</div>
-
-  </header>
-</article>
-
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <header class="archive-article-header">
-    
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2020/06/20/%E5%BD%92%E5%B9%B6%E6%8E%92%E5%BA%8F%E7%9A%84%E4%B8%A4%E7%A7%8D%E6%96%B9%E5%BC%8F/">归并排序的两种方式</a>
-    </h1>
-  
-
-
-    <div class="article-datetime">
-  <a href="/2020/06/20/%E5%BD%92%E5%B9%B6%E6%8E%92%E5%BA%8F%E7%9A%84%E4%B8%A4%E7%A7%8D%E6%96%B9%E5%BC%8F/" class="archive-article-date"><time datetime="2020-06-20T08:36:24.000Z" itemprop="datePublished">六月 20日</time></a>
-</div>
-
-  </header>
-</article>
-
-  
-  
-    </div></section>
-  
-
-
+<!--  -->
 
 
         </div>
