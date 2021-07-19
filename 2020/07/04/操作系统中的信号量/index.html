@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="utf-8">
+  
+  <title>操作系统中的信号量 | 明月清风</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="概述信号量是并发编程中的基本概念，由荷兰计算机科学家Dijkstra发明。简单来说，它是一种变量，用于控制多个进程对公共资源的访问。 其中，允许计数任意资源的信号量称为计数信号量，而将值限制为0和1的信号量称为二进制信号量，也就是锁。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="操作系统中的信号量">
+<meta property="og:url" content="https://ubok.net/2020/07/04/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E4%B8%AD%E7%9A%84%E4%BF%A1%E5%8F%B7%E9%87%8F/index.html">
+<meta property="og:site_name" content="明月清风">
+<meta property="og:description" content="概述信号量是并发编程中的基本概念，由荷兰计算机科学家Dijkstra发明。简单来说，它是一种变量，用于控制多个进程对公共资源的访问。 其中，允许计数任意资源的信号量称为计数信号量，而将值限制为0和1的信号量称为二进制信号量，也就是锁。">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2020-07-04T06:20:30.000Z">
+<meta property="article:modified_time" content="2020-07-04T06:20:30.000Z">
+<meta name="twitter:card" content="summary">
+  
+    <link rel="alternate" href="/atom.xml" title="明月清风" type="application/atom+xml">
+  
+  
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon.ico">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.0/dist/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome@4.5.0/css/font-awesome.min.css" integrity="sha384-XdYbMnZ/QjLh6iI4ogqCTaIjrFk87ip+ekIjefZch0Y+PvJ8CDYtEs1ipDmPorQ+" crossorigin="anonymous">
+
+  
+<link rel="stylesheet" href="/css/styles.css">
+
+  
+
+
+  
+<link rel="stylesheet" href="/static/css/main.5f6295c5.chunk.css">
+
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+<body>
+  <div class="container">
+    <header class="blog-header py-5">
+  <div class="row flex-nowrap justify-content-between align-items-center">
+    <div class="col-12 text-center">
+      <a class="blog-header-logo user-select-none" href="/">明月清风</a>
+    </div>
+  </div>
+</header>
+    
+    <div class="nav-scroller py-1 mb-2">
+  <nav class="nav d-flex justify-content-between">
+<!--    <a class="p-2 text-muted" href="#">null</a>-->
+  </nav>
+</div>
+    <div class="row">
+        <div class="col-sm-9 blog-main">
+          <article id="post-操作系统中的信号量" class="article article-type-post" itemscope itemprop="blogPost">
+
+  <header class="article-header">
+    
+  
+    <h1 class="article-title" itemprop="name">
+      操作系统中的信号量
+    </h1>
+  
+
+
+  </header>
+
+  <div class="article-meta">
+    <div class="article-datetime">
+  <a href="/2020/07/04/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E4%B8%AD%E7%9A%84%E4%BF%A1%E5%8F%B7%E9%87%8F/" class="article-date"><time datetime="2020-07-04T06:20:30.000Z" itemprop="datePublished">2020-07-04</time></a>
+</div>
+
+    
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/%E6%8A%80%E6%9C%AF/">技术</a>
+  </div>
+
+
+  </div>
+  <div class="article-inner">
+
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>信号量是并发编程中的基本概念，由荷兰计算机科学家Dijkstra发明。简单来说，它是一种变量，用于控制多个进程对公共资源的访问。</p>
+<p>其中，允许计数任意资源的信号量称为计数信号量，而将值限制为0和1的信号量称为二进制信号量，也就是锁。</p>
+<span id="more"></span>
+
+<h2 id="POSIX实现"><a href="#POSIX实现" class="headerlink" title="POSIX实现"></a>POSIX实现</h2><p>POSIX系统中的信号量采用P/V机制。P/V来自荷兰语缩写，简单来说，P就是减少（如减1），V就是增加（如加1）。</p>
+<p>在POSIX中，P就是<code>wait</code>，V就是<code>post</code>，含义如下。</p>
+<ul>
+<li><code>wait</code>：将信号量减1，若结果为负，将其置为阻塞态；</li>
+<li><code>post</code>：将信号量加1，若结果为正，将其置为就绪态；</li>
+</ul>
+<p>其中POSIX信号量又分为匿名的和具名的，这里只考虑匿名信号量。</p>
+<h2 id="macOS兼容POSIX匿名信号量"><a href="#macOS兼容POSIX匿名信号量" class="headerlink" title="macOS兼容POSIX匿名信号量"></a>macOS兼容POSIX匿名信号量</h2><p>由于macOS并没有完全实现标准POSIX信号量，可以使用macOS自带GCP信号量，二者之间可以做一些简单兼容。</p>
+<p>如下是匿名信号量的兼容宏定义。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">ifdef</span> __APPLE__</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;dispatch/dispatch.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">typedef</span> <span class="keyword">dispatch_semaphore_t</span> <span class="keyword">sem_t</span>;</span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> sem_init(sem_p, x, val) *sem_p = dispatch_semaphore_create(val)</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> sem_post(sem_p) dispatch_semaphore_signal(*sem_p)</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> sem_wait(sem_p) dispatch_semaphore_wait(*sem_p, DISPATCH_TIME_FOREVER)</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> sem_destroy(sem_p) dispatch_release(*sem_p)</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">else</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;semaphore.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">endif</span></span></span><br></pre></td></tr></table></figure>
+
+<h2 id="生产者与消费者"><a href="#生产者与消费者" class="headerlink" title="生产者与消费者"></a>生产者与消费者</h2><p>多进程资源竞争问题里面，最经典的是生产者消费者问题。</p>
+<p>给定一个长度为n的队列，同时有多个生产者负责生产东西并放到队列里，并且同时也有多个消费者负责消费队列里的东西。</p>
+<p>记信号量<code>sem-empty</code>初始值为n，信号量<code>sem-full</code>初始值为0，队列信号量<code>sem-queue</code>初始值为1（锁）。</p>
+<p>采用P/V操作进行描述，则可如下。</p>
+<p>生产者</p>
+<figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">P(<span class="name">sem-empty</span>)</span><br><span class="line">P(<span class="name">sem-queue</span>)</span><br><span class="line">produce-something()</span><br><span class="line">V(<span class="name">sem-queue</span>)</span><br><span class="line">V(<span class="name">sem-full</span>)</span><br></pre></td></tr></table></figure>
+
+<p>消费者</p>
+<figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">P(<span class="name">sem-full</span>)</span><br><span class="line">P(<span class="name">sem-queue</span>)</span><br><span class="line">consume-something()</span><br><span class="line">V(<span class="name">sem-queue</span>)</span><br><span class="line">V(<span class="name">sem-empty</span>)</span><br></pre></td></tr></table></figure>
+
+<h2 id="简化的🌰子"><a href="#简化的🌰子" class="headerlink" title="简化的🌰子"></a>简化的🌰子</h2><p>考虑我们只有一个生产者和一个消费者，且队列的长度只有一，则队列退化为普通变量。</p>
+<p>于是这就成为两进程交替执行的问题。</p>
+<p>进程1</p>
+<figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">P(<span class="name">sem-1</span>)</span><br><span class="line">do-something()</span><br><span class="line">V(<span class="name">sem-2</span>)</span><br></pre></td></tr></table></figure>
+
+<p>进程2</p>
+<figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">P(<span class="name">sem-2</span>)</span><br><span class="line">do-something()</span><br><span class="line">V(<span class="name">sem-1</span>)</span><br></pre></td></tr></table></figure>
+
+<p>比如说下面这段C代码，一个线程负责计算斐波那契数列（生产），另一个则负责打印（消费）。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">define</span> MAX 94</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">static</span> <span class="keyword">unsigned</span> <span class="keyword">long</span> <span class="keyword">long</span> fib_x = <span class="number">0</span>;</span><br><span class="line"><span class="keyword">static</span> <span class="keyword">sem_t</span> mutex_fib;</span><br><span class="line"><span class="keyword">static</span> <span class="keyword">sem_t</span> mutex_print;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> *<span class="title">fib</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">  sem_post(&amp;mutex_print);</span><br><span class="line"></span><br><span class="line">  <span class="keyword">unsigned</span> <span class="keyword">long</span> <span class="keyword">long</span> fib_1 = <span class="number">1</span>, fib_2 = <span class="number">1</span>;</span><br><span class="line">  <span class="keyword">for</span> (<span class="keyword">size_t</span> i = <span class="number">1</span>; i &lt; MAX; i++)</span><br><span class="line">  &#123;</span><br><span class="line">    sem_wait(&amp;mutex_fib);</span><br><span class="line">    fib_x = i &lt;= <span class="number">2</span> ? <span class="number">1</span> : fib_1 + fib_2;</span><br><span class="line">    fib_1 = fib_2;</span><br><span class="line">    fib_2 = fib_x;</span><br><span class="line">    sem_post(&amp;mutex_print);</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> <span class="literal">NULL</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> *<span class="title">print</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">  <span class="keyword">for</span> (<span class="keyword">size_t</span> i = <span class="number">0</span>; i &lt; MAX; i++)</span><br><span class="line">  &#123;</span><br><span class="line">    sem_wait(&amp;mutex_print);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;fib(%zu) = %llu\n&quot;</span>, i + <span class="number">1</span>, fib_x);</span><br><span class="line">    sem_post(&amp;mutex_fib);</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> <span class="literal">NULL</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>提示：由于<code>unsigned long long</code>在AMD64系统上最长64位限制，这里只求到第94个斐波那契数。求斐波那契数时采用了动态规划的思想，自底向上求解，时间复杂度<code>O(n)</code>，空间复杂度<code>O(1)</code>。</p>
+<p>代码中，<code>sem_wait</code>就是P操作，<code>sem_post</code>就是V操作。</p>
+<p>信号量<code>mutex_print</code>和<code>mutex_fib</code>初始值都是0。在<code>fib</code>线程开始执行时，主动将<code>mutex_print</code>加1，迫使<code>print</code>率先执行。之后二者将形成生产/消费关系，交替执行。</p>
+<p>执行结果如下所示。</p>
+<pre style="background-color: #333; color: #eee; padding: .6rem">
+fib(1) = 0
+fib(2) = 1
+fib(3) = 1
+fib(4) = 2
+fib(5) = 3
+fib(6) = 5
+fib(7) = 8
+fib(8) = 13
+fib(9) = 21
+fib(10) = 34
+fib(11) = 55
+fib(12) = 89
+...
+</pre>
+
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>信号量是并发编程的基础，用于控制进程对公共资源的访问。</p>
+<p>尽管信号量在不同的系统中的使用方式可能不同，但是基本思想都是一致的。</p>
+
+      
+    </div>
+
+    
+      
+
+    
+
+    <footer class="article-footer">
+      <!--  -->
+      
+
+      
+    </footer>
+  </div>
+  
+    
+  <nav id="article-nav" class="row">
+    <div class="col-sm-6">
+      
+        <a href="/2020/07/01/%E4%BA%8C%E5%8F%89%E6%A0%91%E7%9A%84%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5/" id="article-nav-older" class="btn btn-light article-nav-link-wrap">
+          <i class="fa fa-chevron-left pull-left"></i>
+          <span class="article-nav-title">二叉树的基本概念</span>
+        </a>
+      
+    </div>
+    <div class="col-sm-6">
+      
+        <a href="/2020/08/20/CPU%E7%9A%84%E5%9F%BA%E6%9C%AC%E7%BB%93%E6%9E%84/" id="article-nav-newer" class="btn btn-light article-nav-link-wrap">
+          <span class="article-nav-title">CPU的基本结构</span>
+          <i class="fa fa-chevron-right pull-right"></i>
+        </a>
+      
+    </div>
+  </nav>
+
+  
+</article>
+
+<!--  -->
+
+
+        </div>
+        <div class="col-sm-3 col-sm-offset-1 blog-sidebar">
+          
+  <div class="sidebar-module">
+  <div id="search"></div>
+</div>
+
+
+  <div class="sidebar-module">
+  <!-- <h4 class="font-italic font-weight-bolder">关于</h4> -->
+  <p class="mb-0"><i>人生本是梦一场，<br>我愿长醉不愿醒~</i></p>
+  <hr>
+</div>
+
+
+  
+  <div class="sidebar-module">
+    <h4 class="font-italic font-weight-bolder">分类</h4>
+    <ul class="sidebar-module-list"><li class="sidebar-module-list-item"><a class="sidebar-module-list-link" href="/categories/%E6%8A%80%E6%9C%AF/">技术</a><span class="sidebar-module-list-count">5</span></li><li class="sidebar-module-list-item"><a class="sidebar-module-list-link" href="/categories/%E6%8A%95%E8%B5%84/">投资</a><span class="sidebar-module-list-count">2</span></li><li class="sidebar-module-list-item"><a class="sidebar-module-list-link" href="/categories/%E8%AF%BB%E4%B9%A6/">读书</a><span class="sidebar-module-list-count">5</span></li></ul>
+  </div>
+
+
+
+  
+  <div class="sidebar-module">
+    <h4 class="font-italic font-weight-bolder">归档</h4>
+    <ul class="sidebar-module-list"><li class="sidebar-module-list-item"><a class="sidebar-module-list-link" href="/archives/2021/07/">七月 2021</a><span class="sidebar-module-list-count">2</span></li><li class="sidebar-module-list-item"><a class="sidebar-module-list-link" href="/archives/2021/06/">六月 2021</a><span class="sidebar-module-list-count">2</span></li><li class="sidebar-module-list-item"><a class="sidebar-module-list-link" href="/archives/2021/05/">五月 2021</a><span class="sidebar-module-list-count">1</span></li><li class="sidebar-module-list-item"><a class="sidebar-module-list-link" href="/archives/2021/04/">四月 2021</a><span class="sidebar-module-list-count">2</span></li><li class="sidebar-module-list-item"><a class="sidebar-module-list-link" href="/archives/2020/12/">十二月 2020</a><span class="sidebar-module-list-count">1</span></li><li class="sidebar-module-list-item"><a class="sidebar-module-list-link" href="/archives/2020/08/">八月 2020</a><span class="sidebar-module-list-count">1</span></li><li class="sidebar-module-list-item"><a class="sidebar-module-list-link" href="/archives/2020/07/">七月 2020</a><span class="sidebar-module-list-count">2</span></li><li class="sidebar-module-list-item"><a class="sidebar-module-list-link" href="/archives/2020/06/">六月 2020</a><span class="sidebar-module-list-count">1</span></li></ul>
+  </div>
+
+
+
+
+        </div>
+    </div>
+  </div>
+  <footer class="blog-footer">
+  <div class="container">
+    <p id="footer-info" class="inner">
+      &copy; 2021
+      <a class="link-grey" href="/">明月清风</a>
+      <br>
+    </p>
+    <address>
+      <i class="fa fa-envelope" aria-hidden="true"></i>
+      交流联系：<a class="link-grey" href="mailto:feedback@1mail.top">feedback@1mail.top</a>
+    </address>
+    <a href="#" class="link-dark"><i class="fa fa-arrow-up" aria-hidden="true"></i>返回顶部</a>
+  </div>
+</footer>
+
+  
+
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.0/dist/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+<script src="/static/js/runtime-main.ab6daf94.js"></script>
+
+
+<script src="/static/js/2.5b501462.chunk.js"></script>
+
+
+<script src="/static/js/main.efd25b8c.chunk.js"></script>
+
+
+</body>
+</html>

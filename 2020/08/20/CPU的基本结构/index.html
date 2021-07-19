@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="utf-8">
+  
+  <title>CPU的基本结构 | 明月清风</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="概述目前常见的CPU，无论是x86、ARM或MIPS架构，均是建立在冯诺伊曼体系下的。 简单理解，冯诺伊曼体系计算机有以下几个部件组成：  运算器（ALU） 控制器（Controller） 存储器（Memory） 和输入输出（I&#x2F;O）">
+<meta property="og:type" content="article">
+<meta property="og:title" content="CPU的基本结构">
+<meta property="og:url" content="https://ubok.net/2020/08/20/CPU%E7%9A%84%E5%9F%BA%E6%9C%AC%E7%BB%93%E6%9E%84/index.html">
+<meta property="og:site_name" content="明月清风">
+<meta property="og:description" content="概述目前常见的CPU，无论是x86、ARM或MIPS架构，均是建立在冯诺伊曼体系下的。 简单理解，冯诺伊曼体系计算机有以下几个部件组成：  运算器（ALU） 控制器（Controller） 存储器（Memory） 和输入输出（I&#x2F;O）">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://ubok.net/2020/08/20/CPU%E7%9A%84%E5%9F%BA%E6%9C%AC%E7%BB%93%E6%9E%84/cpu-introduction.png">
+<meta property="article:published_time" content="2020-08-20T09:41:21.000Z">
+<meta property="article:modified_time" content="2020-08-20T09:41:21.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://ubok.net/2020/08/20/CPU%E7%9A%84%E5%9F%BA%E6%9C%AC%E7%BB%93%E6%9E%84/cpu-introduction.png">
+  
+    <link rel="alternate" href="/atom.xml" title="明月清风" type="application/atom+xml">
+  
+  
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon.ico">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.0/dist/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome@4.5.0/css/font-awesome.min.css" integrity="sha384-XdYbMnZ/QjLh6iI4ogqCTaIjrFk87ip+ekIjefZch0Y+PvJ8CDYtEs1ipDmPorQ+" crossorigin="anonymous">
+
+  
+<link rel="stylesheet" href="/css/styles.css">
+
+  
+
+
+  
+<link rel="stylesheet" href="/static/css/main.5f6295c5.chunk.css">
+
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+<body>
+  <div class="container">
+    <header class="blog-header py-5">
+  <div class="row flex-nowrap justify-content-between align-items-center">
+    <div class="col-12 text-center">
+      <a class="blog-header-logo user-select-none" href="/">明月清风</a>
+    </div>
+  </div>
+</header>
+    
+    <div class="nav-scroller py-1 mb-2">
+  <nav class="nav d-flex justify-content-between">
+<!--    <a class="p-2 text-muted" href="#">null</a>-->
+  </nav>
+</div>
+    <div class="row">
+        <div class="col-sm-9 blog-main">
+          <article id="post-CPU的基本结构" class="article article-type-post" itemscope itemprop="blogPost">
+
+  <header class="article-header">
+    
+  
+    <h1 class="article-title" itemprop="name">
+      CPU的基本结构
+    </h1>
+  
+
+
+  </header>
+
+  <div class="article-meta">
+    <div class="article-datetime">
+  <a href="/2020/08/20/CPU%E7%9A%84%E5%9F%BA%E6%9C%AC%E7%BB%93%E6%9E%84/" class="article-date"><time datetime="2020-08-20T09:41:21.000Z" itemprop="datePublished">2020-08-20</time></a>
+</div>
+
+    
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/%E6%8A%80%E6%9C%AF/">技术</a>
+  </div>
+
+
+  </div>
+  <div class="article-inner">
+
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>目前常见的CPU，无论是x86、ARM或MIPS架构，均是建立在冯诺伊曼体系下的。</p>
+<p>简单理解，冯诺伊曼体系计算机有以下几个部件组成：</p>
+<ol>
+<li>运算器（ALU）</li>
+<li>控制器（Controller）</li>
+<li>存储器（Memory）</li>
+<li>和输入输出（I/O）</li>
+</ol>
+<span id="more"></span>
+
+<p>其中运算器负责运算；控制器协调指令和数据；存储器存储指令和数据；输入输出为外设，比如硬盘、键盘、网卡，毕竟CPU是需要为外界服务的。</p>
+<p>演进至今，冯诺伊曼计算机已经具有强大的计算能力，许多CPU引入了流水线、分支预测、乱序执行等策略，提高了CPU的部件利用率和计算力。</p>
+<h2 id="从一个简单程序开始"><a href="#从一个简单程序开始" class="headerlink" title="从一个简单程序开始"></a>从一个简单程序开始</h2><img src="/2020/08/20/CPU%E7%9A%84%E5%9F%BA%E6%9C%AC%E7%BB%93%E6%9E%84/cpu-introduction.png" class="" title="CPU原理浅析">
+
+<p>如上图，我们定义了一个简单C程序，负责计算<code>1+2</code>的值，并保存到一个变量<code>a</code>里。为了简单，这个小程序没有I/O操作。</p>
+<p>直接的C指令CPU是无法执行的，因为它不认识C字符。因此需要经过编译器编译为汇编指令，汇编再经过汇编器转为机器指令，如果引用了外部库，可能还需要链接这一步骤，但是此处不需要。</p>
+<p>有了机器指令，就可以让CPU执行了。但是我们的机器指令存储在外设硬盘上，还需要经过DMA设备将指令载入内存，内存里的东西CPU就能通过寻址拿到了。</p>
+<p>内存里存有数据和指令，这些东西都会通过系统总线拿到CPU里。</p>
+<p>指令到达CPU后，首先会被译码，操作码将被转换为相关计算行为，而操作数将载入寄存器，最终由ALU计算处理。</p>
+<p>ALU计算完毕后，一部分中间数据会写回寄存器，访问寄存器比访问存储器快很多，最终结果将写回存储器。在这个🌰里，汇编指令<code>mov %ecx,-0x4(%rbp)</code>对应的机器码就是告诉CPU将结果写回内存变量<code>a</code>。</p>
+<p>CPU内部有个时钟，用于周期性发射脉冲信号，控制CPU对指令顺序执行。在最简单的情况下，一个脉冲执行一条指令。</p>
+<h2 id="更复杂的构造"><a href="#更复杂的构造" class="headerlink" title="更复杂的构造"></a>更复杂的构造</h2><p>以上示例只是最简单的情况，当有I/O时，会复杂许多。</p>
+<p>目前，许多CPU加入了流水线、分支预测、乱序执行等功能，大大提升了CPU性能。比如，在本文的示例CPU中，同一时刻只有一个部件在工作，加入流水线可让很好地避免这一问题。</p>
+<p>同时，提高指令缓存和数据缓存，增加多级缓存，改进缓存读写策略，都能提高CPU计算效率，这里将不深入展开。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>现在，我们了解了CPU的基本原理。</p>
+<p>高级的程序语言必须通过编译汇编，转化为CPU指令。通过CPU译码，控制器处理，运算器计算，最后回写。如此，经过若干个时钟周期后，一个程序才算执行完毕了。</p>
+
+      
+    </div>
+
+    
+      
+
+    
+
+    <footer class="article-footer">
+      <!--  -->
+      
+
+      
+    </footer>
+  </div>
+  
+    
+  <nav id="article-nav" class="row">
+    <div class="col-sm-6">
+      
+        <a href="/2020/07/04/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E4%B8%AD%E7%9A%84%E4%BF%A1%E5%8F%B7%E9%87%8F/" id="article-nav-older" class="btn btn-light article-nav-link-wrap">
+          <i class="fa fa-chevron-left pull-left"></i>
+          <span class="article-nav-title">操作系统中的信号量</span>
+        </a>
+      
+    </div>
+    <div class="col-sm-6">
+      
+        <a href="/2020/12/16/%E9%80%8D%E9%81%A5%E6%B8%B8%E4%B8%8E%E5%BA%84%E5%AD%90%E7%9A%84%E7%90%86%E6%83%B3/" id="article-nav-newer" class="btn btn-light article-nav-link-wrap">
+          <span class="article-nav-title">逍遥游与庄子的理想</span>
+          <i class="fa fa-chevron-right pull-right"></i>
+        </a>
+      
+    </div>
+  </nav>
+
+  
+</article>
+
+<!--  -->
+
+
+        </div>
+        <div class="col-sm-3 col-sm-offset-1 blog-sidebar">
+          
+  <div class="sidebar-module">
+  <div id="search"></div>
+</div>
+
+
+  <div class="sidebar-module">
+  <!-- <h4 class="font-italic font-weight-bolder">关于</h4> -->
+  <p class="mb-0"><i>人生本是梦一场，<br>我愿长醉不愿醒~</i></p>
+  <hr>
+</div>
+
+
+  
+  <div class="sidebar-module">
+    <h4 class="font-italic font-weight-bolder">分类</h4>
+    <ul class="sidebar-module-list"><li class="sidebar-module-list-item"><a class="sidebar-module-list-link" href="/categories/%E6%8A%80%E6%9C%AF/">技术</a><span class="sidebar-module-list-count">5</span></li><li class="sidebar-module-list-item"><a class="sidebar-module-list-link" href="/categories/%E6%8A%95%E8%B5%84/">投资</a><span class="sidebar-module-list-count">2</span></li><li class="sidebar-module-list-item"><a class="sidebar-module-list-link" href="/categories/%E8%AF%BB%E4%B9%A6/">读书</a><span class="sidebar-module-list-count">5</span></li></ul>
+  </div>
+
+
+
+  
+  <div class="sidebar-module">
+    <h4 class="font-italic font-weight-bolder">归档</h4>
+    <ul class="sidebar-module-list"><li class="sidebar-module-list-item"><a class="sidebar-module-list-link" href="/archives/2021/07/">七月 2021</a><span class="sidebar-module-list-count">2</span></li><li class="sidebar-module-list-item"><a class="sidebar-module-list-link" href="/archives/2021/06/">六月 2021</a><span class="sidebar-module-list-count">2</span></li><li class="sidebar-module-list-item"><a class="sidebar-module-list-link" href="/archives/2021/05/">五月 2021</a><span class="sidebar-module-list-count">1</span></li><li class="sidebar-module-list-item"><a class="sidebar-module-list-link" href="/archives/2021/04/">四月 2021</a><span class="sidebar-module-list-count">2</span></li><li class="sidebar-module-list-item"><a class="sidebar-module-list-link" href="/archives/2020/12/">十二月 2020</a><span class="sidebar-module-list-count">1</span></li><li class="sidebar-module-list-item"><a class="sidebar-module-list-link" href="/archives/2020/08/">八月 2020</a><span class="sidebar-module-list-count">1</span></li><li class="sidebar-module-list-item"><a class="sidebar-module-list-link" href="/archives/2020/07/">七月 2020</a><span class="sidebar-module-list-count">2</span></li><li class="sidebar-module-list-item"><a class="sidebar-module-list-link" href="/archives/2020/06/">六月 2020</a><span class="sidebar-module-list-count">1</span></li></ul>
+  </div>
+
+
+
+
+        </div>
+    </div>
+  </div>
+  <footer class="blog-footer">
+  <div class="container">
+    <p id="footer-info" class="inner">
+      &copy; 2021
+      <a class="link-grey" href="/">明月清风</a>
+      <br>
+    </p>
+    <address>
+      <i class="fa fa-envelope" aria-hidden="true"></i>
+      交流联系：<a class="link-grey" href="mailto:feedback@1mail.top">feedback@1mail.top</a>
+    </address>
+    <a href="#" class="link-dark"><i class="fa fa-arrow-up" aria-hidden="true"></i>返回顶部</a>
+  </div>
+</footer>
+
+  
+
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.0/dist/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+<script src="/static/js/runtime-main.ab6daf94.js"></script>
+
+
+<script src="/static/js/2.5b501462.chunk.js"></script>
+
+
+<script src="/static/js/main.efd25b8c.chunk.js"></script>
+
+
+</body>
+</html>
