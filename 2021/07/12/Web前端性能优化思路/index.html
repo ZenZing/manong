@@ -210,6 +210,11 @@
 <p>除了可以提升页面用户体验，还能应用于SEO。</p>
 <h2 id="§2-页面的渲染效率"><a href="#§2-页面的渲染效率" class="headerlink" title="§2 页面的渲染效率"></a>§2 页面的渲染效率</h2><p>不同的前端框架有一些差异，但整体思路是一致的，这里将以React举例。</p>
 <h3 id="§2-1-减少渲染量"><a href="#§2-1-减少渲染量" class="headerlink" title="§2.1 减少渲染量"></a>§2.1 减少渲染量</h3><p><strong>总体原则</strong>：不渲染未展示的部分。</p>
+<p><strong>常用工具</strong>：</p>
+<ul>
+<li>react-window</li>
+<li>react-loadable</li>
+</ul>
 <p><strong>常用方法</strong>：</p>
 <ul>
 <li>虚拟列表：只渲染可见区；</li>
@@ -220,8 +225,14 @@
 <img src="/2021/07/12/Web%E5%89%8D%E7%AB%AF%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96%E6%80%9D%E8%B7%AF/react-window.gif" class="" width="400" title="虚拟列表示例">
 
 <h3 id="§2-2-减少渲染次数"><a href="#§2-2-减少渲染次数" class="headerlink" title="§2.2 减少渲染次数"></a>§2.2 减少渲染次数</h3><p><strong>总体思路</strong>：避免重复的渲染。</p>
+<p><strong>常用工具</strong>：</p>
+<ul>
+<li>lodash</li>
+<li>框架自带</li>
+</ul>
 <p><strong>常用方法</strong>：</p>
 <ul>
+<li>防抖与节流；</li>
 <li>对于React函数组件来说，合理使用副作用，拆分无关联的副作用；</li>
 <li>对于React类组件来说，可以使用<code>shouldComponentUpdate</code>或使用<code>PureComponent</code>来优化渲染；</li>
 <li>利用缓存，如React.memo。</li>
@@ -235,7 +246,7 @@
 <li>对于React函数组件来说，可以使用<code>useMemo</code>缓存复杂计算值。</li>
 </ul>
 <p>举例如下，<code>memoizedValue</code>需要经过复杂计算才能得到，此时就可以使用<code>useMemo</code>缓存，仅仅在输入参数发生变化时才重新计算，这样也就避免了使用该值的<code>AComponent</code>进行重复渲染。</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> MyFunctionalComponent = <span class="function">() =&gt;</span> &#123;</span><br><span class="line">  <span class="keyword">const</span> memoizedValue = useMemo(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">    computeExpensiveValue(a, b);</span><br><span class="line">  &#125;, [a, b]);</span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> (</span><br><span class="line">    &lt;div&gt;</span><br><span class="line">      &lt;AComponent</span><br><span class="line">        value=&#123;memoizedValue&#125;</span><br><span class="line">      /&gt;</span><br><span class="line">    &lt;/div&gt;</span><br><span class="line">  );</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> MyFunctionalComponent = <span class="function">() =&gt;</span> &#123;</span><br><span class="line">  <span class="keyword">const</span> memoizedValue = useMemo(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">    computeExpensiveValue(a, b);</span><br><span class="line">  &#125;, [a, b]);</span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> <span class="xml"><span class="tag">&lt;<span class="name">AComponent</span> <span class="attr">value</span>=<span class="string">&#123;memoizedValue&#125;/</span>&gt;</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 <h2 id="§3-JS代码执行性能"><a href="#§3-JS代码执行性能" class="headerlink" title="§3 JS代码执行性能"></a>§3 JS代码执行性能</h2><h3 id="§3-1-Web-Assembly"><a href="#§3-1-Web-Assembly" class="headerlink" title="§3.1 Web Assembly"></a>§3.1 Web Assembly</h3><p><strong>总体原则</strong>：将复杂的计算逻辑编译为Web Assembly，避免JS类型推断过程的性能开销。</p>
 <p><strong>适用范围有限</strong>：</p>
