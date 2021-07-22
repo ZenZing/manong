@@ -126,7 +126,7 @@
 <ul>
 <li>雪碧图：每个HTTP/1.1请求都是独立的TCP连接，最大6个并发，所以合并图片资源可以优化加载速度。HTTP/2已经不需要这么做了。</li>
 </ul>
-<h3 id="§1-2-CDN加速"><a href="#§1-2-CDN加速" class="headerlink" title="§1.2 CDN加速"></a>§1.2 CDN加速</h3><p><strong>总体原则</strong>： 通过分布的边缘网络节点，缩短资源到终端用户的访问延迟。</p>
+<h3 id="§1-2-CDN加速"><a href="#§1-2-CDN加速" class="headerlink" title="§1.2 CDN加速"></a>§1.2 CDN加速</h3><p><strong>总体原则</strong>： 通过分布式的边缘网络节点，缩短资源到终端用户的访问延迟。</p>
 <p><strong>常用工具</strong>：</p>
 <ul>
 <li>CloudFlare</li>
@@ -151,7 +151,7 @@
 </li>
 </ul>
 <p>拿<a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Headers/ETag">Etag</a>举例，如果浏览器给的<code>If-None-Match</code>值与服务端给的<code>ETag</code>值相等，服务器就直接返回<code>304</code>，从而避免重复传输数据。</p>
-<p>ETG示例：</p>
+<p>Etag示例：</p>
 <img src="/2021/07/12/Web%E5%89%8D%E7%AB%AF%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96%E6%80%9D%E8%B7%AF/etag-demo.png" class="" width="500" title="Etag + If-None-Match 示例">
 
 <hr>
