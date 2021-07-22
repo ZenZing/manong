@@ -15,7 +15,7 @@ html {
 }
 
 body {
-  font-family: "Microsoft YaHei", SimHei, 黑体, Verdana, Arial, Helvetica, sans-serif;
+  font-family: Verdana, Arial, "Microsoft YaHei", SimHei, 黑体, Helvetica, sans-serif;
   color: #555;
 }
 
@@ -38,7 +38,7 @@ h4, .h4,
 h5, .h5,
 h6, .h6,
 .blog-header-logo {
-  font-family: SimSun, 宋体, Times, "Times New Roman", Georgia, serif;
+  font-family: Times, "Times New Roman", SimSun, 宋体, Georgia, serif;
 }
 
 code {
